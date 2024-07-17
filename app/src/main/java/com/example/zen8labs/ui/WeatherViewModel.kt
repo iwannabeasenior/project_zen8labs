@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.zen8labs.data.WeatherRepository
 import com.example.zen8labs.model.TodayWeatherData
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -37,7 +38,7 @@ class WeatherViewModel(val weatherRepository: WeatherRepository): ViewModel() {
         getDataWeather()
     }
     fun getDataWeather() {
-        viewModelScope.launch {
+        viewModelScope.launch {// create a coroutine with coroutinescope
             uiState = try {
                 WeatherUiState.Success(weatherRepository.getDataWeather(q = "${location.latitude},${location.longitude}"))
             } catch (e: IOException) {

@@ -9,6 +9,7 @@ interface WeatherApiService {
     suspend fun getDataWeather(
         @Query("key") key: String,
         @Query("q") q: String,
-        @Query("days") days: Int
+        @Query("days") days: Int,
+        @Query("alerts") alerts: String
     ): TodayWeatherData
 }

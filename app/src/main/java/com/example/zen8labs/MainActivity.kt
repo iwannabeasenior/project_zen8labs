@@ -13,17 +13,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
 import com.example.zen8labs.ui.WeatherViewModel
 import com.example.zen8labs.ui.screen.HomeScreen
 import com.example.zen8labs.ui.screen.SearchScreen
-import com.example.zen8labs.ui.theme.Zen8labsTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.compose.Zen8labsTheme
 import com.example.zen8labs.ui.screen.ForecastScreen
+import com.example.zen8labs.ui.theme.OptionColor
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -86,7 +88,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.surface
+                    color = OptionColor.surface
                 ) {
                     MyEntry(currentLocation = currentLocation)
                 }

@@ -47,9 +47,25 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+
 }
 
 dependencies {
+    // Chart
+    // For Jetpack Compose.
+//    implementation("com.patrykandpatrick.vico:compose:2.0.0-alpha.23")
+//
+//    // For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
+//    implementation("com.patrykandpatrick.vico:compose-m2:2.0.0-alpha.23")
+//
+//    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+//    implementation("com.patrykandpatrick.vico:compose-m3:2.0.0-alpha.23")
+//
+//    // Houses the core logic for charts and other elements. Included in all other modules.
+//    implementation("com.patrykandpatrick.vico:core:2.0.0-alpha.23")
+//
+//    // For the view system.
+//    implementation("com.patrykandpatrick.vico:views:2.0.0-alpha.23")
     // Google maps
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
@@ -78,7 +94,8 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
-
+    //
+    implementation "com.airbnb.android:lottie-compose:6.4.1"
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.4")
     implementation 'com.google.code.gson:gson:2.11.0'

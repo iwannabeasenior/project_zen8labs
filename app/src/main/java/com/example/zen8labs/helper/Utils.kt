@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 
 class Utils {
     companion object {
-        fun dayOfWeek(date: String): DayOfWeek? {
+        fun dayOfWeek(date: String): String {
 //            var year = date.substring(0, 4).toInt()
 //            var month = date.substring(5,7).toInt()
 //            var day = date.substring(8, 10).toInt()
@@ -25,7 +25,16 @@ class Utils {
 //                else -> "Monday"
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
             val date = LocalDate.parse(date, formatter)
-            return date.dayOfWeek
+            return when(date.dayOfWeek.value) {
+                1 -> "Mon"
+                2 -> "Tue"
+                3 -> "Wed"
+                4 -> "Thu"
+                5 -> "Fri"
+                6 -> "Sat"
+                7 -> "Sun"
+                else -> "Mon"
+            }
         }
     }
 }

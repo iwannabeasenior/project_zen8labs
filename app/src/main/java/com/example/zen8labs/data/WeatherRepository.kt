@@ -11,7 +11,8 @@ class NetworkWeatherRepository(val retrofitService: WeatherApiService): WeatherR
         return retrofitService.getDataWeather(
             key = "0e1781c4e19e4b74bb722039241107",
             q = q,
-            days = 7
+            days = 7,
+            alerts = "yes"
         )
     }
 }
