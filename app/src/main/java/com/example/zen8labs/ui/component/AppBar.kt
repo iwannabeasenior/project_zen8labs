@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -45,40 +46,25 @@ fun MyAppBar(
                 Icon(
                     imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = Color.White,
                     modifier = Modifier
                         .clickable { onClickToMap() }
                 )
                 Text(
                     text = "Miami",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = Color.White
                 )
-            }
+}
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Blue
+            containerColor = Color.Blue.copy(alpha = 0.6f)
         ),
-        navigationIcon = {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(shape = CircleShape)
-                    .border(
-                        border = BorderStroke(
-                            width = 1.dp,
-                            color = Color.Gray.copy(alpha = 0.5f)
-                        ), CircleShape
-                    )
-
-            )
-        },
         actions = {
             Icon(
                 imageVector = Icons.Default.Menu,
                 contentDescription = null,
+                tint = Color.White,
                 modifier = Modifier
                     .size(40.dp)
                     .clip(shape = CircleShape)

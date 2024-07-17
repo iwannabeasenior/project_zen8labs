@@ -8,10 +8,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import android.Manifest;
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
@@ -75,14 +77,6 @@ class MainActivity : ComponentActivity() {
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        var currentLocation = LatLng(0.0, 0.0)
-
-        fusedLocationClient.lastLocation // lastLocation là phương thức k đồng bộ
-           .addOnSuccessListener { location: Location? ->
-               if (location != null) {
-                   currentLocation = LatLng(location.latitude, location.longitude)
-               }
-           }
         setContent {
             Zen8labsTheme {
                 // A surface container using the 'background' color from the theme
@@ -90,7 +84,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = OptionColor.surface
                 ) {
-                    MyEntry(currentLocation = currentLocation)
+                    val weatherViewModel: WeatherViewModel = viewModel(factory = WeatherViewModel.Factory) // start get data for today in your location, if not provided, default is HN,VN
+                    LaunchedEffect(Unit){// chỉ khởi chạy 1 lần vì ko có key
+                        fusedLocationClient.lastLocation // lastLocation là phương thức k đồng bộ
+                            .addOnSuccessListener { location: Location? ->
+                                if (location != null) {
+                                    weatherViewModel.location = LatLng(location.latitude, location.longitude)
+                                    Log.d("mylocation", weatherViewModel.location.toString())
+                                }
+                            }
+                    }
+                    MyEntry(weatherViewModel = weatherViewModel)
                 }
             }
         }
@@ -101,10 +105,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyEntry(
     navController: NavHostController = rememberNavController(),
-    currentLocation: LatLng,
+    weatherViewModel: WeatherViewModel
 ) {
-    val weatherViewModel: WeatherViewModel = viewModel(factory = WeatherViewModel.Factory) // start get data for today in your location, if not provided, default is HN,VN
-    weatherViewModel.location = LatLng(currentLocation.latitude, currentLocation.longitude)
+
     NavHost(
         navController = navController,
         startDestination = WeatherScreen.Home.name,

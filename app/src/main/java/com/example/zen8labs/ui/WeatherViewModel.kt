@@ -1,6 +1,7 @@
 package com.example.zen8labs.ui
 
 import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -29,11 +30,12 @@ class WeatherViewModel(val weatherRepository: WeatherRepository): ViewModel() {
     var uiState: WeatherUiState by mutableStateOf(WeatherUiState.Loading)
 
     // Default: Viet Nam
-    var location by mutableStateOf(LatLng(62.0, 105.1))
+    var location by mutableStateOf(LatLng(21.0278, 105.8342))
 
     fun changeLocation(newLocation: LatLng) {
         location = newLocation
     }
+
     init {
         getDataWeather()
     }

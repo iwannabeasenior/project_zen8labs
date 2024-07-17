@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.zen8labs.ui.WeatherViewModel
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -35,12 +36,11 @@ import com.google.maps.android.compose.rememberMarkerState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(viewModel: WeatherViewModel, onClickBack: () -> Unit) {
-    var currentPosision by rememberSaveable {
-        mutableStateOf(viewModel.location)
-    }
+    var currentPosition = viewModel.location
     val cameraPosisionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(currentPosision, 8f)
+        position = CameraPosition.fromLatLngZoom(currentPosition, 8f)
     }
+    var marker = rememberMarkerState(position = currentPosition)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,25 +70,26 @@ fun SearchScreen(viewModel: WeatherViewModel, onClickBack: () -> Unit) {
         floatingActionButton = {
            LargeFloatingActionButton(
                onClick = {
-                   viewModel.changeLocation(currentPosision)
+                   viewModel.changeLocation(currentPosition)
                    viewModel.getDataWeather()
                    onClickBack()
-
-               }
+               },
+               modifier = Modifier
            ) {
                Text(text = "Change", style = MaterialTheme.typography.titleMedium)
-            }
+           }
        }
     ) {
         GoogleMap(
             cameraPositionState = cameraPosisionState,
             onMapClick = {
-                currentPosision = it
+                cameraPosisionState.position = CameraPosition.fromLatLngZoom(it, cameraPosisionState.position.zoom)
+                marker.position = it
             },
             modifier = Modifier.fillMaxSize(),
         ) {
             Marker(
-                state = rememberMarkerState(position = currentPosision),
+                state = marker,
                 title = "Marker",
                 snippet = "Marker in my location",
                 icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
