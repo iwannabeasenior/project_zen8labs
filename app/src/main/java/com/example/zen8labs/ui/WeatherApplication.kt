@@ -1,16 +1,14 @@
 package com.example.zen8labs.ui
 
 import android.app.Application
-import android.location.Location
-import com.example.zen8labs.data.ImplWeatherContainer
-import com.example.zen8labs.data.WeatherContainer
-import com.google.android.gms.maps.model.LatLng
+import com.example.zen8labs.data.ImplAppContainer
+import com.example.zen8labs.data.AppContainer
 
 class WeatherApplication: Application(){
-    lateinit var container: WeatherContainer
+    lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
-        container = ImplWeatherContainer()
+        container = ImplAppContainer()
     }
 }

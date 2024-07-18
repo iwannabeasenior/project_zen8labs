@@ -7,7 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,18 +59,14 @@ import com.example.zen8labs.ui.WeatherViewModel
 import com.example.zen8labs.ui.component.MyAppBar
 import com.example.zen8labs.ui.theme.OptionColor
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: WeatherViewModel,
     onClickToForecast: () -> Unit,
     onClickToMap: () -> Unit,
 ) {
-    var placeName by remember {
-        mutableStateOf("First Place")
-    }
     Scaffold(
-        topBar = { MyAppBar(title = placeName, onClickToMap = onClickToMap) },
+        topBar = { MyAppBar(title = viewModel.name, onClickToMap = onClickToMap) },
         containerColor = OptionColor.surface
     ) {
         Box(modifier = Modifier
@@ -81,7 +77,7 @@ fun HomeScreen(
                     data = (viewModel.uiState as WeatherUiState.Success).data,
                     onClickToForecast = onClickToForecast
                 )
-                is WeatherUiState.Error -> ErrorScreen()
+                is WeatherUiState.Error -> ErrorScreen(viewModel)
                 is WeatherUiState.Loading -> LoadingScreen()
             }
         }
@@ -243,15 +239,45 @@ fun WeatherHourToday(hour: Hour) {
     }
 }
 @Composable
-fun ErrorScreen() {
-    Text(text = "Error", style = MaterialTheme.typography.titleLarge, modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Red))
+fun ErrorScreen(viewModel: WeatherViewModel) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .align(alignment = Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_connection_error),
+                contentDescription = null
+            )
+            TextButton(
+                onClick = {
+                    viewModel.getDataWeather()
+                },
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(10.dp))
+                    .background(color = Color.Red)
+            ) {
+                Text("Retry", color = Color.White)
+            }
+        }
+    }
 }
 
 @Composable
 fun LoadingScreen() {
-    Text(text = "Loading", style = MaterialTheme.typography.titleLarge, modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Blue))
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.loading_img),
+            contentDescription = null,
+            modifier = Modifier
+                .align(alignment = Alignment.Center)
+        )
+    }
 }

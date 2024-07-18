@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.zen8labs.data.MapRepository
 import com.example.zen8labs.data.WeatherRepository
 import com.example.zen8labs.model.TodayWeatherData
 import com.google.android.gms.maps.model.LatLng
@@ -25,17 +26,24 @@ sealed interface WeatherUiState {
     object Error: WeatherUiState
     object Loading: WeatherUiState
 }
-class WeatherViewModel(val weatherRepository: WeatherRepository): ViewModel() {
+class WeatherViewModel(val weatherRepository: WeatherRepository, val mapRepository: MapRepository): ViewModel() {
 
     var uiState: WeatherUiState by mutableStateOf(WeatherUiState.Loading)
 
     // Default: Viet Nam
     var location by mutableStateOf(LatLng(21.0278, 105.8342))
 
+    var name by mutableStateOf("Ha Noi")
+
     fun changeLocation(newLocation: LatLng) {
         location = newLocation
     }
 
+    fun locationToName() {
+        viewModelScope.launch {
+            name = mapRepository.getNamebyLocation(location)
+        }
+    }
     init {
         getDataWeather()
     }
@@ -58,7 +66,8 @@ class WeatherViewModel(val weatherRepository: WeatherRepository): ViewModel() {
                 val application =(this[APPLICATION_KEY] as WeatherApplication)
                 // Get weatherRepository from container
                 val weatherRepository = application.container.weatherRepository
-                WeatherViewModel(weatherRepository = weatherRepository)
+                val mapRepository = application.container.mapRepository
+                WeatherViewModel(weatherRepository = weatherRepository, mapRepository = mapRepository)
             }
         }
     }

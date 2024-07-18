@@ -10,12 +10,10 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
 import com.example.zen8labs.ui.WeatherViewModel
 import com.example.zen8labs.ui.screen.HomeScreen
@@ -26,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.Zen8labsTheme
+import com.example.zen8labs.ui.MapViewModel
 import com.example.zen8labs.ui.screen.ForecastScreen
 import com.example.zen8labs.ui.theme.OptionColor
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -65,9 +64,9 @@ class MainActivity : ComponentActivity() {
                         permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                             isGranted = true
                         } else -> {
-                        // no location access granted
-                        isGranted = false
-                    }
+                            // no location access granted
+                            isGranted = false
+                        }
                     }
                 }
             locationPermissionRequest.launch(arrayOf(
@@ -84,6 +83,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = OptionColor.surface
                 ) {
+                    val mapViewModel: MapViewModel = viewModel(factory = MapViewModel.Factory)
                     val weatherViewModel: WeatherViewModel = viewModel(factory = WeatherViewModel.Factory) // start get data for today in your location, if not provided, default is HN,VN
                     LaunchedEffect(Unit){// chỉ khởi chạy 1 lần vì ko có key
                         fusedLocationClient.lastLocation // lastLocation là phương thức k đồng bộ
@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                     }
-                    MyEntry(weatherViewModel = weatherViewModel)
+                    MyEntry(weatherViewModel = weatherViewModel, mapViewModel = mapViewModel)
                 }
             }
         }
@@ -105,7 +105,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyEntry(
     navController: NavHostController = rememberNavController(),
-    weatherViewModel: WeatherViewModel
+    weatherViewModel: WeatherViewModel,
+    mapViewModel:  MapViewModel
 ) {
 
     NavHost(
@@ -121,7 +122,11 @@ fun MyEntry(
             )
         }
         composable(route = WeatherScreen.Search.name) {
-            SearchScreen(viewModel = weatherViewModel, onClickBack = {navController.navigateUp()})
+            SearchScreen(
+                viewModel = weatherViewModel,
+                mapViewModel = mapViewModel,
+                onClickBack = { navController.navigateUp() }
+            )
         }
         composable(
             route = WeatherScreen.Forecast.name,

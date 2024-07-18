@@ -51,7 +51,7 @@ fun MyAppBar(
                         .clickable { onClickToMap() }
                 )
                 Text(
-                    text = "Miami",
+                    text = "Ha Noi",
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                     color = Color.White
                 )
